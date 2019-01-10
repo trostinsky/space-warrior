@@ -1,32 +1,32 @@
 import Element from "./game-element";
-const EVENT_RENDER = new Event("render");
+import Ship from "./ship";
+import EnemyShip from "./enemyShip";
+import container from "./container";
+import {EVENT_RENDER} from "./constants";
+import {random} from "lodash";
 
-class CustomElement extends Element{
-    constructor(){
-        super();
-    }
-    render(){
-        document.writeln("Custom Element");
-    }
-}
+const mainShip = new Ship(container);
 
+const LEVEL = 3;
+
+setInterval(() => {
+    const randomCount = random(0, LEVEL);
+    for(let i = 0; i < randomCount; i++){
+        const randomPosition = random(0, 9);
+        new EnemyShip(container, randomPosition);
+    }
+}, 3000);
+
+// Слушаем событие render и вызываем метод render()
+// для каждого из существующих элементов(см. Element)
 document.addEventListener("render", () => {
     Element.subscribers.forEach((subscriber) => {
         subscriber.render();
     })
 });
 
-const test1 = new Element();
-const test2 = new Element();
-const test3 = new Element();
-const test4 = new Element();
+// Настраиваем начальное состояние приложения
 
 document.dispatchEvent(EVENT_RENDER);
-
-const test5 = new CustomElement();
-
-setTimeout(() => {
-    document.dispatchEvent(EVENT_RENDER);
-}, 5000);
 
 
